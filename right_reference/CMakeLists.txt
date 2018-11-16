@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+project(rightreference)
+set(CMAKE_CXX_STANDARD 11)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+add_executable(rightreference main.cpp)
