@@ -1,18 +1,39 @@
+#include <iostream>
+#include <atomic>
+#include <vector>
+#include <functional>
+#include <thread>
 
-#include <stdio.h>
-#include <stdlib.h>
+std::atomic<int> i;
+const int count = 100000;
+const int n = 10;
 
-#include <iostream> // std::cout
-#include <thread>   // std::thread
-
-void thread_task() {
-    std::cout << "hello thread" << std::endl;
+void add()
+{
+    for (int j = 0; j < count; ++j)
+        i++;
 }
 
-int main(int argc, const char *argv[])
+int main()
 {
-    std::thread t(thread_task);
-    t.join();
+    i.store(0);
+    std::vector<std::thread> workers;
+    std::cout << "start " << n << " workers, "
+              << "every woker inc " << count  << " times" << std::endl;
 
-    return EXIT_SUCCESS;
-}  /* ----------  end of function main  ---------- */
+    for (int j = 0; j < n; ++j)
+        workers.push_back(std::move(std::thread(add)));
+
+    for (auto & w : workers)
+        w.join();
+
+    std::cout << "workers end "
+              << "finally i is " << i << std::endl;
+
+    if (i == n * count)
+        std::cout << "i++ test passed!" << std::endl;
+    else
+        std::cout << "i++ test failed!" << std::endl;
+
+    return 0;
+}
