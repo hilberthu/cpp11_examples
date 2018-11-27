@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/lamda.dir/main.cpp.o  -o lamda -rdynamic 
